@@ -9,7 +9,8 @@ Follow these simple steps to play.
 
 ### **1\. Prepare your T-Embed**
 
-* Make sure your device has firmware that supports **JavaScript** (XS/Moddable or similar).  
+* **HIGHLY RECOMMENDED**: Use **Bruce Firmware** for the Lilygo T-Embed. This game is optimized to run smoothly on it.  
+* Alternatively, ensure your device has any firmware that supports **JavaScript** (XS/Moddable).  
 * Make sure you have a **MicroSD Card** (formatted to **FAT32**).
 
 ### **2\. Copy Files to SD Card (IMPORTANT\!)**
@@ -34,19 +35,18 @@ You must copy the game files to your SD Card exactly like this image below.
 ### **3\. Play\!**
 
 * Turn on your device.  
-* Launch the app.  
+* Launch the app (if using Bruce, usually found in the Script/App manager).  
 * Enjoy\!
 
 ## **🎮 How to Control (Rotary Dial)**
 
 This game uses the **Dial (Knob)** on the right side of the T-Embed.
 
-| Action | Icon | Menu | Fishing |
-| :---- | :---- | :---- | :---- |
-| **Click Dial** | 🔘 | **Select / OK** | **Cast Line / Reel In** |
-| **Rotate Right** | ↻ | Move Down | Switch to **Auto Mode** |
-| **Rotate Left** | ↺ | Move Up | Switch to **Manual Mode** |
-| **Side Button** | 🔙 | Back / Exit | Cancel / Quit |
+| Action | Icon | Menu | Fishing |  
+| Click Dial | 🔘 | Select / OK | Cast Line / Reel In |  
+| Rotate Right | ↻ | Move Down | Switch to Auto Mode |  
+| Rotate Left | ↺ | Move Up | Switch to Manual Mode |  
+| Side Button | 🔙 | Back / Exit | Cancel / Quit |
 
 ## **📖 How to Play**
 
