@@ -1,13 +1,13 @@
-# **🎣 Fishing Legend (Lilygo T-Embed Edition)**
+# **🎣 Fishing Legend**
 
-Fishing Legend is a retro RPG fishing game for Lilygo T-Embed.  
+Fishing Legend is a retro RPG fishing game for Lilygo.  
 Catch rare fish, upgrade your gear, and become a legend\!
 
 ## **🚀 Quick Installation Guide (Beginner Friendly)**
 
 Follow these simple steps to play.
 
-### **1\. Prepare your T-Embed**
+### **1\. Prepare your Lilygo**
 
 * **HIGHLY RECOMMENDED**: Use **Bruce Firmware** for the Lilygo T-Embed. This game is optimized to run smoothly on it.  
 * Alternatively, ensure your device has any firmware that supports **JavaScript** (XS/Moddable).  
