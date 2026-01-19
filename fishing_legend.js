@@ -36,7 +36,7 @@ function main() {
   var gameData = { money: 0, items: {}, rods: [], charms: [] }; 
 
   // --- SELL PRICE BALANCING ---
-  var sellPrice = [20, 80, 650, 4500, 25000, 150000, 500000];
+  var sellPrice = [20, 80, 650, 4500, 25000, 150000, 750000];
 
   // --- COLOR PALETTE ---
   var cK=C(0,0,0), cW=C(255,255,255), cSea=C(0,0,100), cBar=C(255,200,0);
@@ -538,6 +538,16 @@ function main() {
             if (i === menuIdx) { spr.setTextColor(cMenuSel); spr.drawText("> " + opts[i] + " <", dw/2, menuY + (i*15)); } 
             else { spr.setTextColor(C(100, 100, 100)); spr.drawText(opts[i], dw/2, menuY + (i*15)); }
         }
+
+        // --- WATERMARK & DISCLAIMER ---
+        spr.setTextColor(C(80, 80, 80)); // Warna abu-abu redup
+        spr.setTextSize(0.5); 
+        spr.drawText("by github : metalgalz", dw/2, dh - 18);
+        spr.setTextColor(C(150, 50, 50)); // Agak merah redup untuk peringatan
+        spr.drawText("NOT FOR SALE! THIS IS FREE", dw/2, dh - 8);
+        spr.setTextSize(1); // Kembalikan ukuran text normal
+        // -----------------
+
         if (ok) {
             if(a&&a.tone) a.tone(800, 100);
             if (menuIdx === 0) { appState = 1; st = 0; rec = []; luck = []; } 
