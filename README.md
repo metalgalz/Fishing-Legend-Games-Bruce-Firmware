@@ -103,3 +103,7 @@ Your Fishing Rod gets damaged over time. **Don't fix it immediately\!**
 * This game is made for T-Embed resolution.
 
 *Happy Fishing\!* 🎣
+
+![alt text](https://github.com/metalgalz/Fishing-Legend-Games-Bruce-Firmware-For-Lilygo-T-Embed/blob/main/Pictures/LILYGO%20T-EMBED%20C1101%20PLUS.png?raw=true)
+
+![alt text](https://github.com/metalgalz/Fishing-Legend-Games-Bruce-Firmware-For-Lilygo-T-Embed/blob/main/Pictures/LILYGO%20T-Deck.png?raw=true)
