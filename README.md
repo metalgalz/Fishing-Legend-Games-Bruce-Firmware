@@ -54,7 +54,8 @@ This game uses the **Dial (Knob)** on the right side of the T-Embed.
 ## **📖 How to Play**
 
 ### **Step 1: Cast the Line 🎣**
- 
+
+* Choose **Manual Or Automatic**
 * Wait for the bobber to move.  
 * Status: WAITING...
 
