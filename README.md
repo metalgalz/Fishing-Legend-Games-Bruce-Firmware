@@ -93,6 +93,7 @@ Your Fishing Rod gets damaged over time. **Don't fix it immediately\!**
 **"Game is not saving\!"**
 
 * Did you create the folder /FishingLegendDB on the SD Card?  
+
 * Is your SD Card formatted to FAT32?
 
 **"Screen looks wrong?"**
@@ -100,3 +101,7 @@ Your Fishing Rod gets damaged over time. **Don't fix it immediately\!**
 * This game is made for T-Embed resolution.
 
 *Happy Fishing\!* 🎣
+
+
+Github : metalgalz
+NOT FOR SALE, THIS IS FREE
