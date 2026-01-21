@@ -79,18 +79,18 @@ Milestone Rewards: The game automatically grants you FREE RODS when you reach sp
 * Lvl 40: 40+ Rod
 * Lvl 60: 60+ Rod
 
-🎣 Smart Inventory & Auto-Equip
+**🎣 Smart Inventory & Auto-Equip**
 * Spare Rod System: If you have multiple of the same rod (e.g., "Bamboo Rod x5"), breaking one will automatically use a spare without equipping a new one.
 * Auto-Equip: If your last rod breaks completely, the game intelligently equips the next best rod in your inventory.
 * Sell All: Quickly sell all your caught fish at the market to get rich.
 
-🧿 Charms System
+**🧿 Charms System**
 * Buy Charms in the Shop to boost your stats temporarily!
 * Charms: Consumable items that increase your Luck.
 * Durability: Charms have durability just like rods.
 * Toggle: You can turn Charms ON/OFF in the Inventory.
 
-🌦️ Dynamic Living World
+**🌦️ Dynamic Living World**
 The game features a fully simulated environment that changes as you play:
 * Day & Night Cycle: Watch the sky change from sunrise, to bright day, sunset, and starry night.
 * Dynamic Weather: Random Rain Storms occur every few days.
