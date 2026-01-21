@@ -1,13 +1,13 @@
-# **🎣 Fishing Legend**
+# **🎣 Fishing Legend (Lilygo T-Embed Edition)**
 
-Fishing Legend is a retro RPG fishing game for Bruce Firmware.  
+Fishing Legend is a retro RPG fishing game for Lilygo T-Embed.  
 Catch rare fish, upgrade your gear, and become a legend\!
 
 ## **🚀 Quick Installation Guide (Beginner Friendly)**
 
 Follow these simple steps to play.
 
-### **1\. Prepare your Device**
+### **1\. Prepare your T-Embed**
 
 * **HIGHLY RECOMMENDED**: Use **Bruce Firmware** for the Lilygo T-Embed. This game is optimized to run smoothly on it.  
 * Alternatively, ensure your device has any firmware that supports **JavaScript** (XS/Moddable).  
@@ -19,21 +19,19 @@ You must copy the game files to your SD Card exactly like this image below.
 
 **📂 SD Card Structure:**
 
-[SD_Card_Root]
- ├── main.js                  <-- The game file (Fishing Legend code)
- └── FishingLegendDB/         <-- Create this folder!
-      ├── fish.json           <-- (Optional: Auto-created if missing)
-      ├── rod.json            <-- (Optional: Auto-created if missing)
-      ├── charm.json          <-- (Optional: Auto-created if missing)
-      └── level.json          <-- (Optional: Auto-created if missing)
+\[SD\_Card\_Root\]  
+ ├── fishing_legend.js                \<-- RENAME your chosen version to this\!  
+ └── FishingLegendDB/                 \<-- Copy this entire folder from the repo  
+      ├── fish.json  
+      ├── rod.json  
+      ├── charm.json  
+      └── money.json
+      └── level.json
 
 1. **Download** the /FishingLegendDB folder from this repository.  
 2. **Paste** the folder into the main (root) directory of your SD Card.  
-3. **⚔️ CHOOSE YOUR DIFFICULTY:**  
-   * **Option A (Original)**: Copy fishing\_legend.js. Balanced economy, good rewards.  
-   * **Option B (Hardcore)**: Copy fishing\_legend\_hardcore.js. Lower sell prices, harder grind\!  
-4. **Copy & Rename**: Save your chosen file as main.js (or your firmware's default app name) on the SD Card.  
-5. **Insert** the SD Card into your T-Embed.
+3. **Copy & Rename**: Save your chosen file as main.js (or your firmware's default app name) on the SD Card.  
+4. **Insert** the SD Card into your T-Embed.
 
 ### **3\. Play\!**
 
@@ -55,7 +53,7 @@ This game uses the **Dial (Knob)** on the right side of the T-Embed.
 
 ### **Step 1: Cast the Line 🎣**
 
-* Choose **Manual Fishing or Automatic Fishing**
+* Choose **Manual/Auto/Menu**  
 * Wait for the bobber to move.  
 * Status: WAITING...
 
@@ -110,15 +108,19 @@ Your Fishing Rod gets damaged over time. **Don't fix it immediately\!**
 
 **Pro Tip:** Use a broken rod to catch the rarest fish (Mythic/Secret)\!
 
+## **📈 Economy Tips**
+Level Requirements: Some powerful rods in the shop require a specific Player Level to buy.
+Inflation: As you level up, fish give more EXP, but high-tier rods cost millions. Save your money!
+
 ### **💎 Rarity Colors**
 
-* ⚪ **Common** (Gray)    \- $
-* 🟢 **Uncommon** (Green) \- $$
-* 🔵 **Rare** (Blue)      \- $$$
-* 🟣 **Epic** (Purple)    \- $$$$
-* 🟠 **Legend** (Orange)  \- $$$$$
-* 🔴 **Mythic** (Red)     \- $$$$$$
-* 💎 **Secret** (Cyan)    \- $$$$$$$
+* ⚪ **Common** (Gray) \- Cheap  
+* 🟢 **Uncommon** (Green)  
+* 🔵 **Rare** (Blue)  
+* 🟣 **Epic** (Purple)  
+* 🟠 **Legend** (Orange)  
+* 🔴 **Mythic** (Red) \- BOSS  
+* 💎 **Secret** (Cyan) \- ???
 
 ## **❓ Troubleshooting**
 
@@ -126,6 +128,9 @@ Your Fishing Rod gets damaged over time. **Don't fix it immediately\!**
 
 * Did you create the folder /FishingLegendDB on the SD Card?  
 * Is your SD Card formatted to FAT32?
+
+**"My progress is gone!"**
+* Check if the /FishingLegendDB folder exists on the SD Card. The game needs permission to write JSON files there.
 
 **"Screen looks wrong?"**
 
