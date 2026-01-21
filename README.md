@@ -22,11 +22,11 @@ You must copy the game files to your SD Card exactly like this image below.
 \[SD\_Card\_Root\]  
  ├── fishing_legend.js                \<-- RENAME your chosen version to this\!  
  └── FishingLegendDB/                 \<-- Copy this entire folder from the repo  
-.      ├── fish.json  
-.      ├── rod.json  
-.      ├── charm.json  
-.      └── money.json
-.      └── level.json
+..      └── fish.json  
+..      └── rod.json  
+..      └── charm.json  
+..      └── money.json
+..      └── level.json
 
 1. **Download** the /FishingLegendDB folder from this repository.  
 2. **Paste** the folder into the main (root) directory of your SD Card.  
