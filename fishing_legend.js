@@ -27,7 +27,7 @@ function main() {
   var folderPath = "/BruceGames/FishingLegendDB";
   var fsType = "sd"; // Variabel fs tetap disediakan agar developer mudah menggantinya
 
-  // Buat direktori utama dan sub-direktori (Hanya tereksekusi saat startup, aman dari error jika folder sudah ada)
+  // Buat direktori utama dan sub-direktori (Hanya tereksekusi saat startup)
   try { serialCmd("storage mkdir /BruceGames"); } catch(errMkdir1) {}
   try { serialCmd("storage mkdir " + folderPath); } catch(errMkdir2) {}
 
@@ -149,6 +149,9 @@ function main() {
   var tmDay=0, tmSpd=0.25; 
   var wOff=0;
   var notifMsg = ""; var notifTm = 0;
+
+  // Variabel untuk Mode Hard (Ayodance style)
+  var hardCursorX = 0, hardCursorDir = 1, hardTargetX = 0, hardTargetW = 30, hardSpeed = 2;
    
   var bird={x:-20,y:10,a:false};
   var isl = { x:-100, a:false, type:0, trees:[], fire:{ a:false }, people: [] }; 
@@ -681,7 +684,7 @@ function main() {
   var skyH = M(dh/2); var seaH = dh - skyH;
   var dkH=25; 
 
-  k.setLongPress(true);
+  if (k && k.setLongPress) k.setLongPress(true);
   while(true) {
     var now = Date.now();
     var ok = k.getSelPress(true);
@@ -816,20 +819,102 @@ function main() {
             if (evRoll < 0.05) activeEvent = 1; else if (evRoll < 0.10) activeEvent = 2; else activeEvent = 0;
         } 
         else if(st===1) { 
-          if(nxt) { mode++; if(mode>2)mode=0; if(a&&a.tone)a.tone(600,50); }
-          if(prv) { mode--; if(mode<0)mode=2; if(a&&a.tone)a.tone(600,50); }
-          if(now>tmBite) { curF=randF(); fStam=curF.hp; maxStam=fStam; st=2; tmAct=now; if(a&&a.tone){a.tone(800,100);delay(50);a.tone(800,100);} }
-        } else if(st===2) { 
-          if(nxt) { mode++; if(mode>2)mode=0; if(mode===1)tmAct=now; if(a&&a.tone)a.tone(600,50); }
-          if(prv) { mode--; if(mode<0)mode=2; if(mode===1)tmAct=now; if(a&&a.tone)a.tone(600,50); }
+          // 0 = MAN, 1 = AUTO, 2 = HARD, 3 = MENU
+          if(nxt) { mode++; if(mode>3)mode=0; if(a&&a.tone)a.tone(600,50); }
+          if(prv) { mode--; if(mode<0)mode=3; if(a&&a.tone)a.tone(600,50); }
+          
+          if(now>tmBite) { 
+              curF=randF(); fStam=curF.hp; maxStam=fStam; st=2; tmAct=now; 
+              
+              // Inisialisasi Mode Hard (Kecepatan dan Lebar berdasarkan rarity ikan)
+              hardCursorX = 0; 
+              hardCursorDir = 1;
+              
+              // Rarity Ikan = Target mengecil. Rarity Joran = Target melebar (Buff alat)
+              var baseHardW = Math.max(12, 34 - (curF.r * 3)); 
+              var rodBonusW = activeRod.r * 5; // BUFF: Joran makin mahal = Bar makin lebar signifikan
+              hardTargetW = baseHardW + rodBonusW; 
+              
+              hardTargetX = 5 + M(R() * (barW - 10 - hardTargetW));
+              
+              // Kecepatan di-buff jauh lebih tinggi
+              hardSpeed = 3.5 + (curF.r * 0.8);
 
-          var regen = 0.05 + (curF.r * 0.15); fStam += regen; if(fStam>maxStam)fStam=maxStam;
+              if(a&&a.tone){a.tone(800,100);delay(50);a.tone(800,100);} 
+          }
+        } else if(st===2) { 
+          if(nxt) { mode++; if(mode>3)mode=0; if(mode===0||mode===2)tmAct=now; if(a&&a.tone)a.tone(600,50); }
+          if(prv) { mode--; if(mode<0)mode=3; if(mode===0||mode===2)tmAct=now; if(a&&a.tone)a.tone(600,50); }
+
+          var regen = 0.05 + (curF.r * 0.15); 
+          // Ikan tidak bisa regenerasi HP di mode HARD (2)
+          if (mode !== 2) { fStam += regen; }
+          if(fStam>maxStam)fStam=maxStam;
+          
           var totalL = getTotalLuck(); var rodPwr = Math.sqrt(totalL) * 0.2; 
-          var dmgMan = 15 + (activeRod.r * 7) + rodPwr; var dmgAuto = 4.0 + (activeRod.r * 3.0) + (rodPwr * 0.6); 
+          
+          // --- CALCULATE DAMAGE ---
+          // Mode MAN (0): Damage normal dikurangi agar butuh beberapa kali tarik
+          var dmgMan = 4.0 + (activeRod.r * 3.0) + (rodPwr * 0.5); 
+          // Mode AUTO (1): Damage pasif otomatis juga disesuaikan
+          var dmgAuto = 1.5 + (activeRod.r * 1.5) + (rodPwr * 0.3); 
+          // Mode HARD (2): Base lebih sakit & Rod Power naik berdasarkan rarity
+          var baseHardDmg = 5.0 + (activeRod.r * 5.0); // BUFF Base damage
+          var rodBonusHard = rodPwr * (1.15 + (activeRod.r * 0.05)); // BUFF Rod Power +5% per rarity tier
 
           var barY = dh - 40; 
-          if(mode===1) { if(vld) { fStam-=dmgMan; tmAct=now; if(a&&a.tone)a.tone(200,20); } if(now-tmAct>3000) { st=5; if(a&&a.tone)a.tone(100,500); } } 
-          else if(mode===0) { fStam-=dmgAuto; if(now%500<50 && a&&a.tone)a.tone(200,10); }
+
+          if(mode===0) { 
+              if(vld) { fStam-=dmgMan; tmAct=now; if(a&&a.tone)a.tone(200,20); } 
+              if(now-tmAct>3000) { st=5; if(a&&a.tone)a.tone(100,500); } 
+          } 
+          else if(mode===1) {
+              fStam-=dmgAuto; if(now%500<50 && a&&a.tone)a.tone(200,10);
+          }
+          else if(mode===2) {
+              // Pantulkan Kursor Kiri dan Kanan
+              hardCursorX += hardSpeed * hardCursorDir;
+              if (hardCursorX >= barW) { hardCursorX = barW; hardCursorDir = -1; }
+              if (hardCursorX <= 0) { hardCursorX = 0; hardCursorDir = 1; }
+              
+              if(vld) {
+                  tmAct = now; // Cegah timeout escape
+                  var center = hardTargetX + (hardTargetW / 2);
+                  var dist = Math.abs(hardCursorX - center);
+                  var maxDist = hardTargetW / 2;
+                  
+                  // Jika kursor berada di dalam highlight bar target
+                  if (dist <= maxDist) {
+                      // Semakin ke tengah highlight, damage berlipat ganda!
+                      var accuracy = 1.0 - (dist / maxDist); 
+                      // BUFF: Multiplier damage tambahan jika rarity rod tinggi
+                      var rodMultiBuff = (activeRod.r * 0.3); // max +1.8x bonus multiplier di tier tertinggi
+                      // Mult damage: Meleset di pinggir (0.1x), Pas di tengah Perfect (2.5x + buff joran)
+                      var mult = 0.1 + (accuracy * (2.4 + rodMultiBuff)); 
+                      
+                      var finalHardDmg = (baseHardDmg + rodBonusHard) * mult;
+                      fStam -= finalHardDmg;
+                      
+                      // Feedback suara (Perfect vs Good)
+                      if (accuracy > 0.8) {
+                          // Perfect hit sound
+                          if(a&&a.tone) { a.tone(2000, 40); delay(40); a.tone(2500, 60); }
+                      } else {
+                          // Normal hit sound
+                          if(a&&a.tone) a.tone(1500, 50);
+                      }
+                      
+                      // Segera pindah target secara acak untuk pukulan selanjutnya
+                      hardTargetX = 5 + M(R() * (barW - 10 - hardTargetW));
+                      hardCursorDir = (R() > 0.5) ? 1 : -1; // arah acak
+                  } else {
+                      // Miss penalty
+                      if(a&&a.tone)a.tone(100, 100);
+                  }
+              }
+              // Jika AFK tidak menekan sama sekali > 4 detik, ikan kabur
+              if(now-tmAct>4000) { st=5; if(a&&a.tone)a.tone(100,500); }
+          }
             
           if(fStam<=0) { 
               addS(curF); if(a&&a.tone){a.tone(1000,100);a.tone(1500,300);} st=0; 
@@ -839,7 +924,7 @@ function main() {
           }
         } else if(st===5) { if(vld || (now-tmAct>1500)) st=0; }
 
-        if(mode===2 && ok) { appState = 0; if(a&&a.tone) a.tone(400, 100); delay(200); }
+        if(mode===3 && ok) { appState = 0; if(a&&a.tone) a.tone(400, 100); delay(200); }
 
         var drawSky = curSky; if (rain.a && !isN) drawSky = cRainSky; 
         fR(0, 0, gW, skyH, drawSky);
@@ -886,6 +971,17 @@ function main() {
 
         drHud(dh - 24); 
 
+        var tBag = 0; var fK = Object.keys(gameData.items);
+        for(var idxBag=0; idxBag<fK.length; idxBag++) { 
+            var itm = gameData.items[fK[idxBag]]; 
+            var p = (itm.p !== undefined) ? itm.p : sellPrice[itm.r]; 
+            tBag += p * itm.q; 
+        }
+        spr.setTextAlign(0); spr.setTextSize(0.5); 
+        spr.setTextColor(cGold); spr.drawText("Cash: $" + fmtM(gameData.money), 4, 4);
+        spr.setTextColor(C(150, 200, 255)); spr.drawText("Bag:  $" + fmtM(tBag), 4, 14);
+        spr.setTextSize(1);
+
         var rodCol = (activeRod.r >= 0 && activeRod.r < rCols.length) ? rCols[activeRod.r] : cRodDefault;
         if(activeRod.r === 0 && activeRod.p === 0) rodCol = cRodDefault;
         var rodBaseX = gW + 10; var rodBaseY = dh + 10; var rodTipX = (gW / 2); var rodTipY = (dh / 2) - 20;
@@ -915,9 +1011,10 @@ function main() {
         spr.setTextSize(1); spr.setTextColor(cW); spr.setTextAlign(1); var cX=gW/2; var barY = dh - 40; 
         
         if(st==1 || st==2) {
-              if(mode===1) { spr.setTextColor(cYel); spr.drawText("< MAN >", cX, barY - 10); }
-              else if(mode===0) { spr.setTextColor(cGrn); spr.drawText("< AUTO >", cX, barY - 10); }
-              else if(mode===2) { spr.setTextColor(cRed); spr.drawText("< MENU >", cX, barY - 10); }
+              if(mode===0) { spr.setTextColor(cYel); spr.drawText("< MAN >", cX, barY - 10); }
+              else if(mode===1) { spr.setTextColor(cGrn); spr.drawText("< AUTO >", cX, barY - 10); }
+              else if(mode===2) { spr.setTextColor(C(255, 100, 50)); spr.drawText("< HARD >", cX, barY - 10); }
+              else if(mode===3) { spr.setTextColor(cRed); spr.drawText("< MENU >", cX, barY - 10); }
 
               if (activeEvent === 1) { spr.setTextColor(cGold); spr.drawText("EV: DOUBLE CATCH!", cX, barY - 25); } 
               else if (activeEvent === 2) { spr.setTextColor(cYel); spr.drawText("EV: TREASURE!", cX, barY - 25); }
@@ -927,6 +1024,41 @@ function main() {
           var bX=(gW-barW)/2, pct=fStam/maxStam; if(pct<0)pct=0;
           fR(M(bX), barY, barW, 6, cBg); spr.drawRect(M(bX), barY, barW, 6, cW);
           var fW=M((barW-2)*pct); if(fW>0) { fR(M(bX)+1, barY+1, fW, 4, cBar); }
+          
+          // --- RENDERING MODE HARD UI (AYODANCE BAR) ---
+          if (mode === 2) {
+              // Posisi Bar dipindah ke atas (Y = 35), tepat di bawah tulisan Cash & Bag
+              var tBarY = 35; 
+              fR(M(bX), tBarY, barW, 8, cBg); 
+              spr.drawRect(M(bX), tBarY, barW, 8, C(100,100,100));
+              
+              // GRADIENT HALUS (Luar: Pastel Muda -> Dalam: Hijau Tua)
+              var centerGrad = M(hardTargetW / 2);
+              for (var gradI = 0; gradI <= centerGrad; gradI++) {
+                  var ratio = gradI / centerGrad; // 0.0 (pinggir luar) ke 1.0 (pusat dalam)
+                  // Interpolasi halus dari Hijau Pastel Muda ke Hijau Tua
+                  var rG = M(200 - (160 * ratio));
+                  var gG = M(255 - (75 * ratio));
+                  var bG = M(200 - (140 * ratio));
+                  var cGrad = C(rG, gG, bG);
+                  
+                  var xOffLeft = M(bX) + hardTargetX + gradI;
+                  var xOffRight = M(bX) + hardTargetX + hardTargetW - 1 - gradI;
+                  
+                  sLine(xOffLeft, tBarY+1, xOffLeft, tBarY+6, cGrad); // Tarik garis simetris kiri ke tengah
+                  if (xOffRight > xOffLeft) { // Cegah tumpang tindih
+                      sLine(xOffRight, tBarY+1, xOffRight, tBarY+6, cGrad); // Kanan ke tengah
+                  }
+              }
+              
+              // Perfect zone indicator line (Tengah persis lebih pekat)
+              var inOff = M(hardTargetW/2);
+              sLine(M(bX) + hardTargetX + inOff, tBarY+1, M(bX) + hardTargetX + inOff, tBarY+6, C(20, 100, 30));
+              
+              // Cursor yang bergerak super cepat
+              fR(M(bX) + M(hardCursorX) - 1, tBarY - 3, 3, 14, cRed);
+          }
+
         } else if(st==5) { spr.setTextColor(cRed); spr.drawText("ESCAPED!",cX,dh/2); spr.setTextColor(cW); spr.drawText("Too Slow!",cX,dh/2+15); }
             
         var pX=sX; 
@@ -1235,6 +1367,6 @@ function main() {
     spr.pushSprite(); 
     delay(20);
   }
-  k.setLongPress(false);
+  if (k && k.setLongPress) k.setLongPress(false);
 }
 main();
